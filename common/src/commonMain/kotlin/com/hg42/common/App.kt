@@ -43,7 +43,7 @@ open class Plugin(
 
 open class UiPlugin(
     name: String,
-    val ui: @Composable () -> Unit = { Text("not initialized") },
+    val ui: @Composable () -> Unit = { /* Text("not initialized") */ },
 ) : Plugin(name = name) {
     @Composable
     fun compose() {
@@ -58,7 +58,7 @@ class NativePlugin : UiPlugin(
         name = "native",
         ui = {
             println("compose NativePlugin ui")
-            Text("ui from NativePlugin")
+            //Text("ui from NativePlugin")
         },
 )
 
@@ -105,10 +105,6 @@ println("script begin")
     
 class ScriptPlugin : UiPlugin(
     name = "script",
-    ui = @Composable {
-        println("compose ScriptPlugin ui")
-        Text("ui from ScriptPlugin")
-    },
 )
 
 val plugin = ScriptPlugin()
@@ -118,6 +114,11 @@ println("script = " + plugin.toString())
 plugin
 
 """
+
+//ui = @Composable {
+//    println("compose ScriptPlugin ui")
+//    Text("ui from ScriptPlugin")
+//},
 
 //---------------------------------------- UI
 
@@ -183,8 +184,8 @@ fun App() {
     LaunchedEffect(uiScript) {
         nativePlugin = NativePlugin()
         println("native: ui = " + nativePlugin?.ui.toString())
-        //scriptPlugin = runScript(appScript) as UiPlugin
-        //println("script: ui = " + scriptPlugin?.ui.toString())
+        scriptPlugin = runScript(uiScript) as UiPlugin
+        println("script: ui = " + scriptPlugin?.ui.toString())
     }
 
     Column(
